@@ -1,4 +1,6 @@
+import math
 import torch
+import torch.nn.functional as F
 
 from einops import rearrange
 from torch import nn
@@ -33,9 +35,33 @@ class CausalSelfAttention(nn.Module):
     return proj
 
   def attention(self, key, query, value, attention_mask):
+    # scaled dot-product attention
+    # key, query, value: [bs, num_heads, seq_len, head_size]
+    d_k = self.attention_head_size
 
-    ### 완성시켜야 할 빈 코드 블록
-    raise NotImplementedError
+    # query와 key의 내적으로 attention score 계산 후 스케일링
+    scores = torch.matmul(query, key.transpose(-2, -1)) / math.sqrt(d_k)
+
+    # causal mask 적용: 미래 위치(상삼각)를 -inf 로 차단해 future token 을 못 보게 함
+    seq_len = scores.size(-1)
+    causal_mask = torch.triu(
+        torch.ones(seq_len, seq_len, dtype=torch.bool, device=scores.device),
+        diagonal=1,
+    )
+    scores = scores.masked_fill(causal_mask, float('-inf'))
+
+    # padding mask 적용 (padding 위치는 큰 음수, softmax 후 0에 가까워짐)
+    scores = scores + attention_mask
+
+    # softmax로 확률 분포로 변환
+    attn_weights = F.softmax(scores, dim=-1)
+    attn_weights = self.dropout(attn_weights)
+
+    # value와 곱해서 context vector 계산
+    # [bs, heads, seq, head_size] → [bs, seq, all_head_size]
+    context = torch.matmul(attn_weights, value)
+    context = rearrange(context, 'b h t d -> b t (h d)')
+    return context
 
 
   def forward(self, hidden_states, attention_mask):

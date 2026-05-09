@@ -25,11 +25,11 @@ class GPT2Layer(nn.Module):
     """
     TODO: forward() 함수를 위한 이 helper 메서드를 구현하시오:
       - 이 함수는 multi-head attention layer와 feed forward layer 이후에 적용된다.
-      - GPT-2 layer는 각 sublayer의 변환된 출력에 드롭아웃을 적용한 후, 이를 sublayer 입력에 더한다. 
+      - GPT-2 layer는 각 sublayer의 변환된 출력에 드롭아웃을 적용한 후, 이를 sublayer 입력에 더한다.
         이 함수에서는 Layer Normalization을 적용하지 않는다.
     """
-    ### 완성시켜야 할 빈 코드 블록
-    raise NotImplementedError
+    # dense → dropout → residual 연결
+    return input + dropout(dense_layer(output))
 
 
   def forward(self, hidden_states, attention_mask):
@@ -40,6 +40,16 @@ class GPT2Layer(nn.Module):
       - Dropout, Residual Connection, Layer Normalization를 적용하시오(self.add() 메서드를 사용)
       - Feed-Forward layer: hidden states를 추가로 refine하기 위해 변환을 적용한다.
     """
+    # GPT-2는 Pre-LayerNorm 구조: LN → sublayer → residual 순서
 
-    ### 완성시켜야 할 빈 코드 블록
-    raise NotImplementedError
+    # Attention block: LN → Attention → add (residual)
+    normed = self.attention_layer_norm(hidden_states)
+    attn_out = self.self_attention(normed, attention_mask)
+    hidden_states = self.add(hidden_states, attn_out, self.attention_dense, self.attention_dropout)
+
+    # FFN block: LN → FFN → add (residual)
+    normed = self.out_layer_norm(hidden_states)
+    ff_out = self.interm_af(self.interm_dense(normed))
+    hidden_states = self.add(hidden_states, ff_out, self.out_dense, self.out_dropout)
+
+    return hidden_states
