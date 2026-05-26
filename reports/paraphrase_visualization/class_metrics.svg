@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="470" viewBox="0 0 760 470">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#111827}.title{font-size:22px;font-weight:700}.label{font-size:13px}.small{font-size:12px}.value{font-size:18px;font-weight:700}</style>
+<text x="40" y="42" class="title">Class-wise Metrics</text>
+<text x="40" y="103" class="label">class 0 precision</text>
+<rect x="250" y="85" width="420" height="24" fill="#e5e7eb"/>
+<rect x="250" y="85" width="391.0" height="24" fill="#2563eb"/>
+<text x="682" y="103" class="label">0.931</text>
+<text x="40" y="151" class="label">class 0 recall</text>
+<rect x="250" y="133" width="420" height="24" fill="#e5e7eb"/>
+<rect x="250" y="133" width="384.0" height="24" fill="#2563eb"/>
+<text x="682" y="151" class="label">0.914</text>
+<text x="40" y="199" class="label">class 0 F1</text>
+<rect x="250" y="181" width="420" height="24" fill="#e5e7eb"/>
+<rect x="250" y="181" width="387.5" height="24" fill="#2563eb"/>
+<text x="682" y="199" class="label">0.923</text>
+<text x="40" y="247" class="label">class 1 precision</text>
+<rect x="250" y="229" width="420" height="24" fill="#e5e7eb"/>
+<rect x="250" y="229" width="360.2" height="24" fill="#2563eb"/>
+<text x="682" y="247" class="label">0.858</text>
+<text x="40" y="295" class="label">class 1 recall</text>
+<rect x="250" y="277" width="420" height="24" fill="#e5e7eb"/>
+<rect x="250" y="277" width="371.1" height="24" fill="#2563eb"/>
+<text x="682" y="295" class="label">0.884</text>
+<text x="40" y="343" class="label">class 1 F1</text>
+<rect x="250" y="325" width="420" height="24" fill="#e5e7eb"/>
+<rect x="250" y="325" width="365.6" height="24" fill="#2563eb"/>
+<text x="682" y="343" class="label">0.870</text>
+</svg>

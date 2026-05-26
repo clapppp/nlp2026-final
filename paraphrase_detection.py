@@ -27,7 +27,7 @@ from datasets import (
   ParaphraseDetectionTestDataset,
   load_paraphrase_data
 )
-from evaluation import model_eval_paraphrase, model_test_paraphrase
+from evaluation import model_eval_paraphrase, model_test_paraphrase, tune_paraphrase_threshold
 from models.gpt2 import GPT2Model
 
 from optimizer import AdamW
@@ -170,9 +170,17 @@ def test(args):
   para_test_dataloader = DataLoader(para_test_data, shuffle=False, batch_size=args.batch_size,
                                     collate_fn=para_test_data.collate_fn)
 
-  dev_para_acc, _, dev_para_y_pred, _, dev_para_sent_ids = model_eval_paraphrase(para_dev_dataloader, model, device)
+  threshold = args.threshold
+  if args.tune_threshold:
+    threshold, tuned_acc, tuned_f1 = tune_paraphrase_threshold(
+      para_dev_dataloader, model, device, bidirectional=args.bidirectional_eval)
+    print(f"best dev threshold :: {threshold :.2f}, acc :: {tuned_acc :.3f}, f1 :: {tuned_f1 :.3f}")
+
+  dev_para_acc, _, dev_para_y_pred, _, dev_para_sent_ids = model_eval_paraphrase(
+    para_dev_dataloader, model, device, bidirectional=args.bidirectional_eval, threshold=threshold)
   print(f"dev paraphrase acc :: {dev_para_acc :.3f}")
-  test_para_y_pred, test_para_sent_ids = model_test_paraphrase(para_test_dataloader, model, device)
+  test_para_y_pred, test_para_sent_ids = model_test_paraphrase(
+    para_test_dataloader, model, device, bidirectional=args.bidirectional_eval, threshold=threshold)
 
   with open(args.para_dev_out, "w+") as f:
     f.write(f"id \t Predicted_Is_Paraphrase \n")
@@ -197,6 +205,14 @@ def get_args():
   parser.add_argument("--seed", type=int, default=11711)
   parser.add_argument("--epochs", type=int, default=10)
   parser.add_argument("--use_gpu", action='store_true')
+  parser.add_argument("--bidirectional_eval", action='store_true',
+                      help="average logits from (sentence1, sentence2) and (sentence2, sentence1) prompts at eval/test time")
+  parser.add_argument("--threshold", type=float, default=None,
+                      help="optional P(yes) threshold for prediction; default uses argmax")
+  parser.add_argument("--tune_threshold", action='store_true',
+                      help="choose a P(yes) threshold on dev before writing predictions")
+  parser.add_argument("--skip_train", action='store_true',
+                      help="load the existing checkpoint and only run dev/test prediction")
 
   parser.add_argument("--batch_size", help='sst: 64, cfimdb: 8 can fit a 12GB GPU', type=int, default=8)
   parser.add_argument("--lr", type=float, help="learning rate", default=1e-5)
@@ -231,5 +247,6 @@ if __name__ == "__main__":
   args = get_args()
   args.filepath = f'{args.epochs}-{args.lr}-paraphrase.pt'  # 경로명 저장.
   seed_everything(args.seed)  # 재현성을 위한 random seed 고정.
-  train(args)
+  if not args.skip_train:
+    train(args)
   test(args)

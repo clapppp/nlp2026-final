@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="480" viewBox="0 0 820 480">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#111827}.title{font-size:22px;font-weight:700}.label{font-size:13px}.small{font-size:12px}.value{font-size:18px;font-weight:700}</style>
+<text x="40" y="42" class="title">Accuracy by Token Overlap Bucket</text>
+<line x1="100" y1="380" x2="740" y2="380" stroke="#111827"/>
+<line x1="100" y1="100" x2="100" y2="380" stroke="#111827"/>
+<line x1="95" y1="380.0" x2="740" y2="380.0" stroke="#e5e7eb"/>
+<text x="88" y="384.0" text-anchor="end" class="small">0.00</text>
+<line x1="95" y1="310.0" x2="740" y2="310.0" stroke="#e5e7eb"/>
+<text x="88" y="314.0" text-anchor="end" class="small">0.25</text>
+<line x1="95" y1="240.0" x2="740" y2="240.0" stroke="#e5e7eb"/>
+<text x="88" y="244.0" text-anchor="end" class="small">0.50</text>
+<line x1="95" y1="170.0" x2="740" y2="170.0" stroke="#e5e7eb"/>
+<text x="88" y="174.0" text-anchor="end" class="small">0.75</text>
+<line x1="95" y1="100.0" x2="740" y2="100.0" stroke="#e5e7eb"/>
+<text x="88" y="104.0" text-anchor="end" class="small">1.00</text>
+<rect x="124.0" y="107.64267990074444" width="80.0" height="272.35732009925556" fill="#059669"/>
+<text x="164.0" y="99.64267990074444" text-anchor="middle" class="small">0.973</text>
+<text x="164.0" y="402" text-anchor="middle" class="small">0.00-0.20</text>
+<text x="164.0" y="420" text-anchor="middle" class="small">n=11,284</text>
+<rect x="252.0" y="130.23991360024687" width="80.0" height="249.76008639975313" fill="#059669"/>
+<text x="292.0" y="122.23991360024687" text-anchor="middle" class="small">0.892</text>
+<text x="292.0" y="402" text-anchor="middle" class="small">0.20-0.40</text>
+<text x="292.0" y="420" text-anchor="middle" class="small">n=12,963</text>
+<rect x="380.0" y="143.3475661827498" width="80.0" height="236.6524338172502" fill="#059669"/>
+<text x="420.0" y="135.3475661827498" text-anchor="middle" class="small">0.845</text>
+<text x="420.0" y="402" text-anchor="middle" class="small">0.40-0.60</text>
+<text x="420.0" y="420" text-anchor="middle" class="small">n=8,197</text>
+<rect x="508.0" y="136.52415987273812" width="80.0" height="243.47584012726188" fill="#059669"/>
+<text x="548.0" y="128.52415987273812" text-anchor="middle" class="small">0.870</text>
+<text x="548.0" y="402" text-anchor="middle" class="small">0.60-0.80</text>
+<text x="548.0" y="420" text-anchor="middle" class="small">n=5,029</text>
+<rect x="636.0" y="127.09066305818675" width="80.0" height="252.90933694181325" fill="#059669"/>
+<text x="676.0" y="119.09066305818675" text-anchor="middle" class="small">0.903</text>
+<text x="676.0" y="402" text-anchor="middle" class="small">0.80-1.00</text>
+<text x="676.0" y="420" text-anchor="middle" class="small">n=2,956</text>
+</svg>

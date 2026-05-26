@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="480" viewBox="0 0 820 480">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#111827}.title{font-size:22px;font-weight:700}.label{font-size:13px}.small{font-size:12px}.value{font-size:18px;font-weight:700}</style>
+<text x="40" y="42" class="title">Accuracy by Sentence Length Bucket</text>
+<line x1="100" y1="380" x2="740" y2="380" stroke="#111827"/>
+<line x1="100" y1="100" x2="100" y2="380" stroke="#111827"/>
+<line x1="95" y1="380.0" x2="740" y2="380.0" stroke="#e5e7eb"/>
+<text x="88" y="384.0" text-anchor="end" class="small">0.00</text>
+<line x1="95" y1="310.0" x2="740" y2="310.0" stroke="#e5e7eb"/>
+<text x="88" y="314.0" text-anchor="end" class="small">0.25</text>
+<line x1="95" y1="240.0" x2="740" y2="240.0" stroke="#e5e7eb"/>
+<text x="88" y="244.0" text-anchor="end" class="small">0.50</text>
+<line x1="95" y1="170.0" x2="740" y2="170.0" stroke="#e5e7eb"/>
+<text x="88" y="174.0" text-anchor="end" class="small">0.75</text>
+<line x1="95" y1="100.0" x2="740" y2="100.0" stroke="#e5e7eb"/>
+<text x="88" y="104.0" text-anchor="end" class="small">1.00</text>
+<rect x="130.0" y="132.46046199559092" width="100.0" height="247.53953800440908" fill="#059669"/>
+<text x="180.0" y="124.46046199559092" text-anchor="middle" class="small">0.884</text>
+<text x="180.0" y="402" text-anchor="middle" class="small">short-short</text>
+<text x="180.0" y="420" text-anchor="middle" class="small">n=20,866</text>
+<rect x="290.0" y="123.71284352215366" width="100.0" height="256.28715647784634" fill="#059669"/>
+<text x="340.0" y="115.71284352215366" text-anchor="middle" class="small">0.915</text>
+<text x="340.0" y="402" text-anchor="middle" class="small">short-long</text>
+<text x="340.0" y="420" text-anchor="middle" class="small">n=5,349</text>
+<rect x="450.0" y="123.84168482207696" width="100.0" height="256.15831517792304" fill="#059669"/>
+<text x="500.0" y="115.84168482207696" text-anchor="middle" class="small">0.915</text>
+<text x="500.0" y="402" text-anchor="middle" class="small">long-short</text>
+<text x="500.0" y="420" text-anchor="middle" class="small">n=5,508</text>
+<rect x="610.0" y="118.58947852056053" width="100.0" height="261.41052147943947" fill="#059669"/>
+<text x="660.0" y="110.58947852056053" text-anchor="middle" class="small">0.934</text>
+<text x="660.0" y="402" text-anchor="middle" class="small">long-long</text>
+<text x="660.0" y="420" text-anchor="middle" class="small">n=8,706</text>
+</svg>

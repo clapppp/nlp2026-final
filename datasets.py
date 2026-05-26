@@ -60,6 +60,12 @@ class ParaphraseDetectionDataset(Dataset):
       'sent_ids': sent_ids
     }
 
+    if getattr(self.p, 'bidirectional_eval', False) or getattr(self.p, 'tune_threshold', False):
+      reversed_cloze_style_sents = [format_paraphrase_prompt(s2, s1) for (s1, s2) in zip(sent1, sent2)]
+      reversed_encoding = self.tokenizer(reversed_cloze_style_sents, return_tensors='pt', padding=True, truncation=True)
+      batched_data['reversed_token_ids'] = torch.LongTensor(reversed_encoding['input_ids'])
+      batched_data['reversed_attention_mask'] = torch.LongTensor(reversed_encoding['attention_mask'])
+
     return batched_data
 
 
@@ -93,6 +99,12 @@ class ParaphraseDetectionTestDataset(Dataset):
       'attention_mask': attention_mask,
       'sent_ids': sent_ids
     }
+
+    if getattr(self.p, 'bidirectional_eval', False) or getattr(self.p, 'tune_threshold', False):
+      reversed_cloze_style_sents = [format_paraphrase_prompt(s2, s1) for (s1, s2) in zip(sent1, sent2)]
+      reversed_encoding = self.tokenizer(reversed_cloze_style_sents, return_tensors='pt', padding=True, truncation=True)
+      batched_data['reversed_token_ids'] = torch.LongTensor(reversed_encoding['input_ids'])
+      batched_data['reversed_attention_mask'] = torch.LongTensor(reversed_encoding['attention_mask'])
 
     return batched_data
 
