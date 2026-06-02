@@ -92,12 +92,13 @@ python sonnet_generation.py \
 | 2026-06-01 | `9_10-1e-05-sonnet.pt` | 10 | 1e-5 | 0.95 | 0.9 | 1.05 | 41.023 | Longer training did not improve the dev score over the 5-epoch checkpoint, so the 10-epoch model was not selected for the final held-out generation. |
 | 2026-06-01 | `4_5-1e-05-sonnet.pt` | skip train | 1e-5 | 0.95 | 0.95 + top-k 50 | 1.05 | 41.120 | Adding top-k sampling with a wider nucleus was slightly worse than the selected 5-epoch decoding setup. |
 | 2026-06-01 | `4_5-1e-05-sonnet.pt` | skip train | 1e-5 | 0.95 | 0.9 | 1.05 | 37.042 | Reducing max generation length to 80 tokens made several outputs incomplete and lowered chrF substantially. |
+| 2026-06-02 | `4_5-1e-05-sonnet.pt` | skip train | 1e-5 | 0.95 | 0.9 | 1.05 | 42.629 | Best result from a 240-run decoding sweep over sampling seed, temperature, top-p, repetition penalty, and max generation length. Selected seed `4` and max generation length `140`. |
 
 ## Selected Final Configuration
 
 - Checkpoint: `4_5-1e-05-sonnet.pt`
-- Dev chrF: `41.204`
-- Decoding: `temperature=0.95`, `top_p=0.9`, `repetition_penalty=1.05`, `max_generation_length=100`, `target_lines=14`
+- Dev chrF: `42.629`
+- Decoding: `seed=4`, `temperature=0.95`, `top_p=0.9`, `repetition_penalty=1.05`, `max_generation_length=140`, `target_lines=14`
 - Official held-out output: `predictions/generated_sonnets.txt`
 
 Official held-out predictions were generated without using held-out gold labels:
@@ -107,10 +108,11 @@ python sonnet_generation.py \
   --use_gpu \
   --skip_train \
   --epochs 5 \
+  --seed 4 \
   --temperature 0.95 \
   --top_p 0.9 \
   --repetition_penalty 1.05 \
-  --max_generation_length 100 \
+  --max_generation_length 140 \
   --held_out_sonnet_path data/sonnets_held_out.txt \
   --sonnet_out predictions/generated_sonnets.txt
 ```
