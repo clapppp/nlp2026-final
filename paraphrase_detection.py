@@ -27,7 +27,7 @@ from datasets import (
   ParaphraseDetectionTestDataset,
   load_paraphrase_data
 )
-from evaluation import model_eval_paraphrase, model_test_paraphrase
+from evaluation import model_eval_paraphrase, model_test_paraphrase, tune_paraphrase_threshold
 from models.gpt2 import GPT2Model
 
 from optimizer import AdamW
@@ -51,7 +51,8 @@ class ParaphraseGPT(nn.Module):
   def __init__(self, args):
     super().__init__()
     self.gpt = GPT2Model.from_pretrained(model=args.model_size, d=args.d, l=args.l, num_heads=args.num_heads)
-    self.paraphrase_detection_head = nn.Linear(args.d, 2)  # Paraphrase detection 의 출력은 두 가지: 1 (yes) or 0 (no).
+    # Class order must match Quora labels: 0 -> no, 1 -> yes.
+    self.register_buffer('answer_token_ids', torch.tensor([3919, 8505], dtype=torch.long))
 
     # 기본적으로, 전체 모델을 finetuning 한다.
     for param in self.gpt.parameters():
@@ -59,18 +60,20 @@ class ParaphraseGPT(nn.Module):
 
   def forward(self, input_ids, attention_mask):
     """
-    TODO: paraphrase_detection_head Linear layer를 사용하여 토큰의 레이블을 예측하시오.
+    Cloze prompt의 마지막 hidden state에서 "no"와 "yes" 다음 토큰 logit을 예측한다.
 
     입력은 다음과 같은 구조를 갖는다:
 
       'Is "{s1}" a paraphrase of "{s2}"? Answer "yes" or "no": '
 
-    따라서, 문장의 끝에서 다음 토큰에 대한 예측을 해야 할 것이다. 
+    따라서, 문장의 끝에서 다음 토큰에 대한 예측을 해야 할 것이다.
     훈련이 잘 되었다면, 패러프레이즈인 경우에는 토큰 "yes"(BPE index 8505)가, 
     패러프레이즈가 아닌 경우에는 토큰 "no" (BPE index 3919)가 될 것이다.
     """
-    ### 완성시켜야 할 빈 코드 블록
-    raise NotImplementedError
+    output = self.gpt(input_ids, attention_mask)
+    next_token_logits = self.gpt.hidden_state_to_token(output['last_token'])
+
+    return next_token_logits.index_select(dim=1, index=self.answer_token_ids)
 
 
 
@@ -164,12 +167,20 @@ def test(args):
 
   para_dev_dataloader = DataLoader(para_dev_data, shuffle=False, batch_size=args.batch_size,
                                    collate_fn=para_dev_data.collate_fn)
-  para_test_dataloader = DataLoader(para_test_data, shuffle=True, batch_size=args.batch_size,
+  para_test_dataloader = DataLoader(para_test_data, shuffle=False, batch_size=args.batch_size,
                                     collate_fn=para_test_data.collate_fn)
 
-  dev_para_acc, _, dev_para_y_pred, _, dev_para_sent_ids = model_eval_paraphrase(para_dev_dataloader, model, device)
+  threshold = args.threshold
+  if args.tune_threshold:
+    threshold, tuned_acc, tuned_f1 = tune_paraphrase_threshold(
+      para_dev_dataloader, model, device, bidirectional=args.bidirectional_eval)
+    print(f"best dev threshold :: {threshold :.2f}, acc :: {tuned_acc :.3f}, f1 :: {tuned_f1 :.3f}")
+
+  dev_para_acc, _, dev_para_y_pred, _, dev_para_sent_ids = model_eval_paraphrase(
+    para_dev_dataloader, model, device, bidirectional=args.bidirectional_eval, threshold=threshold)
   print(f"dev paraphrase acc :: {dev_para_acc :.3f}")
-  test_para_y_pred, test_para_sent_ids = model_test_paraphrase(para_test_dataloader, model, device)
+  test_para_y_pred, test_para_sent_ids = model_test_paraphrase(
+    para_test_dataloader, model, device, bidirectional=args.bidirectional_eval, threshold=threshold)
 
   with open(args.para_dev_out, "w+") as f:
     f.write(f"id \t Predicted_Is_Paraphrase \n")
@@ -194,6 +205,14 @@ def get_args():
   parser.add_argument("--seed", type=int, default=11711)
   parser.add_argument("--epochs", type=int, default=10)
   parser.add_argument("--use_gpu", action='store_true')
+  parser.add_argument("--bidirectional_eval", action='store_true',
+                      help="average logits from (sentence1, sentence2) and (sentence2, sentence1) prompts at eval/test time")
+  parser.add_argument("--threshold", type=float, default=None,
+                      help="optional P(yes) threshold for prediction; default uses argmax")
+  parser.add_argument("--tune_threshold", action='store_true',
+                      help="choose a P(yes) threshold on dev before writing predictions")
+  parser.add_argument("--skip_train", action='store_true',
+                      help="load the existing checkpoint and only run dev/test prediction")
 
   parser.add_argument("--batch_size", help='sst: 64, cfimdb: 8 can fit a 12GB GPU', type=int, default=8)
   parser.add_argument("--lr", type=float, help="learning rate", default=1e-5)
@@ -228,5 +247,6 @@ if __name__ == "__main__":
   args = get_args()
   args.filepath = f'{args.epochs}-{args.lr}-paraphrase.pt'  # 경로명 저장.
   seed_everything(args.seed)  # 재현성을 위한 random seed 고정.
-  train(args)
+  if not args.skip_train:
+    train(args)
   test(args)

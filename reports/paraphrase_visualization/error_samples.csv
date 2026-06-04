@@ -1,0 +1,61 @@
+error_type,id,gold,pred,jaccard,length_bucket,sentence1,sentence2
+FP_high_overlap,38396 911e630d-79cc-43c6-9933-8bc36595b1cf,0,1,1.0000,long-long,What advantages are there to being a female relative to being a male?,What advantages are there to being a male relative to being a female?
+FP_high_overlap,203783 381bed5c-9b51-419a-8665-c7c8187d044b,0,1,1.0000,long-long,How can I connect my laptop to the internet through my Android phone?,How can I connect my android phone to the internet through my laptop?
+FP_high_overlap,236250 eb289241-d684-4795-9d79-f5f9b8b28c2b,0,1,1.0000,short-short,If you were a farmer what would you grow?,"If you were a farmer, what would you grow?"
+FP_high_overlap,367305 a9a0a941-6949-494d-a43c-bc7a8d4671bb,0,1,1.0000,short-short,What is your impression of China? 你对中国的印象如何？,What is your impression of China?
+FP_high_overlap,154886 c5a6626e-a1ce-4c39-b09c-8abd67f30496,0,1,1.0000,short-short,What type of guys do girls like?,What type of girls do guys like?
+FP_high_overlap,149351 d0e326d0-789d-49c0-8bec-297fef85ce87,0,1,1.0000,long-long,Is competitive bidding legal in industrial sector? If so are there any restrictions in doing so?,Is competitive bidding is legal in industrial sector? If so are there any restrictions in doing so?
+FP_high_overlap,217339 b5bbda08-7c8d-40c5-8794-e7d9b34cdbe9,0,1,1.0000,long-long,What's the best way to get from Union Station to Dulles?,What's the best way to get from Dulles to Union Station?
+FP_high_overlap,189773 14ae653b-605c-4314-9044-63c74ca907c3,0,1,1.0000,long-long,"What positive things (stereotypes, cliches, thoughts, memories) can Armenians share about Azerbaijanis?","What positive things (stereotypes, cliches, thoughts, memories) can Azerbaijanis share about Armenians?"
+FP_high_overlap,6591 97623fc4-92b5-449b-b020-0dc09167c35f,0,1,1.0000,short-short,How has Disney's culture changed since the Pixar acquisition?,How has Pixar's culture changed since the Disney acquisition?
+FP_high_overlap,51611 4b9294c2-c4f9-4c8e-aea8-db47f8bb5242,0,1,1.0000,short-short,What is the difference between eddy current loss & hysteresis loss?,What is the difference between Hysteresis loss & Eddy current loss?
+FP_high_overlap,144862 eb60262e-eb8a-4afa-afae-4f25b3da6084,0,1,1.0000,short-short,Do women cheat more than men?,Do more women cheat than men?
+FP_high_overlap,99398 bb37b3c9-5a82-4932-8687-81e37539f0a0,0,1,1.0000,short-short,What kind of Asian guys do White girls like?,What kind of Asian girls do White guys like?
+FP_high_overlap,357594 e58a195b-62c2-46f6-928f-4fa3668dc247,0,1,1.0000,short-short,I'm scared of death. What do I do?,I'm scared of death.What do I do?
+FP_high_overlap,223951 a694ff78-a3b0-463e-8e63-83234d3e60c8,0,1,1.0000,short-short,Can you be suicidal without being depressed?,Can you be depressed without being suicidal?
+FP_high_overlap,204211 9dae9d53-105a-46f1-bc13-5561cefec0ab,0,1,1.0000,short-short,Is moonshine illegal?  Why?,Why is moonshine illegal?
+FP_high_overlap,158615 5447c82d-9eb2-412e-8c26-dfcf02ecad52,0,1,1.0000,long-long,What new paradigms do you think may be significant in the future of interactive computing? [,What new paradigms do you think may be significant in the future of interactive computing?
+FP_high_overlap,318923 6d4437d2-ee0a-4f9d-a620-fb27b6011d37,0,1,1.0000,short-short,Should I choose my girlfriend or overseas education?,Should I choose my overseas education or girlfriend?
+FP_high_overlap,329977 115ae2e6-05dc-423f-8c19-bd36ebe9ab47,0,1,1.0000,short-short,How is CoolPad Note 3 & CoolPad Note 3 lite?,How is coolpad note 3 lite?
+FP_high_overlap,386717 c3737d23-a220-4455-a82a-92b603013a8f,0,1,1.0000,short-short,Which is better :computer science or computer science engineering?,Which is better: computer science or engineering?
+FP_high_overlap,78271 9f29cb4a-2142-4b6a-bc4a-bc0e569191e3,0,1,1.0000,long-long,"I am 17 now, how can I ""earn"" my first house or Lamborghini within 5 years? (One of my hobbies is Animation if that matters.)","I am 17 now, how can I ""earn"" my first house or Lamborghini within 5 years? (One of my hobbies is Animation if that matters.)?"
+FP_high_overlap,357851 7daf3932-f725-4a8c-973d-eea6efe4f0e8,0,1,0.9412,long-long,"Cricket: In t20 cricket history, how many matches have taken place where a single six was not hit?","Cricket: In t20 cricket history, how many matches have taken place where a single six was hit?"
+FP_high_overlap,380819 94d88370-23c5-43f1-aeef-71d26c94b891,0,1,0.9375,long-long,How many hours should I charge my new Vivo X7 phone for the first time?,How many hours should I charge my new Vivo X7 phone for the first time? Request
+FP_high_overlap,363926 a0069102-f0f0-4342-8909-a407165d7eb2,0,1,0.9286,long-long,What are the first signs of a homosexual person turning straight or bisexual?,What are the first signs of a straight person turning into a homosexual or bisexual?
+FP_high_overlap,190305 ad4311db-040c-4961-8547-22249e8d5cf9,0,1,0.9286,long-long,Which people should I meet in New York City if I'm interested in startups?,Which people should I meet in New York City if I'm interested in tech startups?
+FP_high_overlap,97760 ca70365d-237e-49f4-ae08-d4ab6c02adf8,0,1,0.9231,long-long,Who occupies the office of speaker when both speaker and deputy speaker are absent?,Who occupies the office of speaker when both speaker deputy speaker and panel are absent?
+FP_high_overlap,287688 5cb2e2a1-5f09-4e93-89e4-7a5cfb44d702,0,1,0.9231,long-long,How do I convince youth to celebrate Indian festivals in the traditional way?,How do I convince youth to celebrate Indian festivals in traditional way?
+FP_high_overlap,20175 5ba30fc9-53bd-4b46-a86f-ca3aaa93102e,0,1,0.9200,long-long,Which cellular carrier in the world has the shortest period of time for the user to keep their old phone number if they return for device refund?,Which cellular carrier in the world has the longest period of time for the user to keep their old phone number if they return for device refund?
+FP_high_overlap,200013 35dbc53c-a998-4371-8725-75a59b2825f0,0,1,0.9167,short-long,Is anybody there who could work on ANSYS for an assignment?,Is anybody there who could work on ANSYS software for an assignment?
+FP_high_overlap,17928 2a41f394-65e9-4e4d-afb8-c20ef30dc40e,0,1,0.9167,long-short,Which is the best institute for coaching of mass communication in delhi ?,Which is the best coaching institute for mass communication in delhi?
+FP_high_overlap,252632 030b0770-1957-4e3f-8a30-3edc854e307f,0,1,0.9167,short-long,What are some good gift ideas for a 13-year old?,What are some good birthday gift ideas for a 13-year-old?
+FN_low_overlap,182117 e67d728a-97a1-45eb-9f2b-174fe7a09ae3,1,0,0.0714,short-short,How do I stay peaceful and happy?,What is the easiest way to be happy?
+FN_low_overlap,36528 c3ad4614-bcae-4aa6-8ebc-d5b18be2dc79,1,0,0.0714,short-short,What should be done to get rid of laziness?,How do I get over procastination?
+FN_low_overlap,217241 9f845f7c-4cd7-4c5a-9921-954f8456a829,1,0,0.0833,short-short,What forex brokers can be trusted?,How do I choose a forex broker?
+FN_low_overlap,255127 c681298b-e6e9-4e16-92e4-168e684ef3e5,1,0,0.0909,short-short,When will there be world peace?,How do we achieve Global peace?
+FN_low_overlap,396983 27d6a635-109f-49e4-a1d5-80d98c11c375,1,0,0.0909,short-short,How does it feel to be dead?,What would dying feel like?
+FN_low_overlap,7571 064a66fe-884e-4957-9d38-05b18cea0c3f,1,0,0.0909,short-short,What is git hub?,How can I start learning Git and Github?
+FN_low_overlap,272348 3566eb77-3554-48ec-87bd-e2219240469b,1,0,0.0909,short-short,What books I should read?,The best book you have ever read?
+FN_low_overlap,63012 0653ca56-1411-4a06-8cb3-04039a2f2461,1,0,0.0909,short-short,What is the use of confidence interval?,How are confidence intervals used?
+FN_low_overlap,154206 d5ae2d72-c7fa-4562-b6ee-7f5faa55f61a,1,0,0.1000,short-short,Is homosexuality observed in animals?,Why are there no gay animals?
+FN_low_overlap,344281 24be94d9-41d4-4166-85f8-510f3681f0c2,1,0,0.1000,short-short,How I use this Quora?,What after signing up on Quora?
+FN_low_overlap,68669 d9061808-6818-475f-8056-6230b634ea47,1,0,0.1000,long-short,Are there any music apps that I can listen to without needing an Internet connection?,What app for music without wifi for iPod?
+FN_low_overlap,36342 2e9ec632-4f17-4148-9291-97f31bc8ca00,1,0,0.1000,short-short,Why apple is so expensive?,Are Apple products overrated and overpriced?
+FN_low_overlap,384493 10d1021f-a867-464e-bd2c-a6854b0d5107,1,0,0.1000,short-short,What is it like to be raped?,Have you been raped?
+FN_low_overlap,208849 e5329997-e879-45cf-a40e-eed7ad9d504c,1,0,0.1111,short-short,What is a good way to learn stock trading?,Where can I learn about investing in stock market from scratch?
+FN_low_overlap,28999 380ff18c-19d0-45fb-9454-bae875d682be,1,0,0.1111,short-short,Can any inorganic material burn?,Do non-organic compounds burn?
+FN_low_overlap,31061 c70d30de-9a3d-4043-95a3-e0f00bd04fc4,1,0,0.1111,long-short,Why can't Pirate Bay just be stopped by raiding their servers?,How do websites like The Pirate Bay survive?
+FN_low_overlap,166758 76c6dd53-4b23-4677-881c-743879638d3a,1,0,0.1111,short-long,Will Hillary face justice for her crimes?,Why is Hillary Clinton not in jail after all the allegations of crimes?
+FN_low_overlap,80258 8d19506e-1e11-4183-b2bb-efbc574d8968,1,0,0.1111,short-short,What are some tips on not getting distracted while studying?,How do I study online without getting distracted or sidetracked?
+FN_low_overlap,265108 eda777c0-3e89-4835-ae1a-dd4ac8b8f260,1,0,0.1111,short-short,Is it interesting to work as a cyber security?,What are the ups and downs of working in cyber security?
+FN_low_overlap,82582 dc786d02-141b-41df-bc75-b90a672f1515,1,0,0.1176,short-long,Can India be a developed country?,"When will India look like U.S., Germany, France and other developed countries?"
+FN_low_overlap,327874 b7f3505b-0b2e-472a-ac4c-7b8730dfc466,1,0,0.1176,short-short,When can women get pregnant in the menstrual cycle?,Is it possible to get pregnant before your regular period?
+FN_low_overlap,62091 d172ff1d-654e-466d-967a-1b237c4ae518,1,0,0.1250,short-short,How does one overcome depression and anxiety?,What is the best way to overcome depression without doing anything?
+FN_low_overlap,267036 fea044ee-bc73-4e37-ae94-0d642f3f1e6e,1,0,0.1250,long-short,What are the benefits of filling Nitrogen gas instead of air in tubeless tires?,Is nitrogen good for tires?
+FN_low_overlap,162185 398205b4-bf16-4a35-94e3-4b8ecb01a16f,1,0,0.1250,long-long,Which of America's founding fathers were more religious and which were less religious?,"Why do many Americans believe that the Founding Fathers were Christians when the majority, were in fact, Deists>?"
+FN_low_overlap,202829 8fa2db05-6d1a-47df-8246-c8e449db3f3e,1,0,0.1250,long-short,"From an evolutionary perspective, why do we have multiple different blood types and what advantages or disadvantages does that entail?",Evolutionary advantage of the different blood groups?
+FN_low_overlap,316458 3b4ea969-f82f-4408-a8a9-89e8981dedaa,1,0,0.1250,short-short,What are the causes of acidity?,Which causes aciditi?
+FN_low_overlap,196903 a43dc8b6-a482-4d19-bbb9-e0b870e6ee0e,1,0,0.1250,short-short,How does heavy water affect human health?,What are the physiological effects of drinking heavy water (deuterium oxide)?
+FN_low_overlap,327086 8fd3fdd7-add7-43e2-8b72-f16642d39e0f,1,0,0.1250,short-short,What are some of the challenges you face as a writer?,Is it challenging to be a writer?
+FN_low_overlap,178556 3315ecb6-39ff-4754-86b2-b4058b437565,1,0,0.1304,long-short,"In what ways are we brainwashed as children, and why don't we allow children to decide for themselves when they are grown?",How are children brainwashed by society?
+FN_low_overlap,269826 15d1a407-acf9-405f-9926-4801e1808728,1,0,0.1333,short-short,What is the best way to reduce cholesterol without medicines?,How can I reduce my cholesterol naturally?
