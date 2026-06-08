@@ -9,7 +9,7 @@ required_files = [p for p in os.listdir('.') if p.endswith('.py')] + \
                         [f'modules/{p}' for p in os.listdir('modules')]
 
 def main():
-    aid = 'nlp2025-1_project_outputs'
+    aid = 'nlp2026-final-outputs'
 
     with zipfile.ZipFile(f"{aid}.zip", 'w') as zz:
         for file in required_files:

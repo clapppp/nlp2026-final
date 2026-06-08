@@ -23,7 +23,7 @@ class GPT2Layer(nn.Module):
 
   def add(self, input, output, dense_layer, dropout):
     """
-    TODO: forward() 함수를 위한 이 helper 메서드를 구현하시오:
+    forward() 함수를 위한 helper 메서드:
       - 이 함수는 multi-head attention layer와 feed forward layer 이후에 적용된다.
       - GPT-2 layer는 각 sublayer의 변환된 출력에 드롭아웃을 적용한 후, 이를 sublayer 입력에 더한다.
         이 함수에서는 Layer Normalization을 적용하지 않는다.
@@ -34,7 +34,7 @@ class GPT2Layer(nn.Module):
 
   def forward(self, hidden_states, attention_mask):
     """
-    TODO: forward pass의 구현. 고려해야 할 주요 사항은 다음과 같다:
+    forward pass 구현. 고려해야 할 주요 사항은 다음과 같다:
       - Multi-head Attention layer(CausalSelfAttention): mask된 입력을 기반으로 self-attention을 계산한다.
       - Layer Normalization: Attention layer와 Feed-forward layer 이전에 적용된다.
       - Dropout, Residual Connection, Layer Normalization를 적용하시오(self.add() 메서드를 사용)

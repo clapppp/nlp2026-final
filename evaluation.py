@@ -19,7 +19,24 @@ from datasets import (
 TQDM_DISABLE = False
 
 
+def _logits_for_ids(model, device, token_ids, attention_mask):
+  return model(token_ids.to(device), attention_mask.to(device))
+
+
 def _batch_paraphrase_logits(batch, model, device, bidirectional=False):
+  if 'ensemble_token_ids' in batch:
+    logits_to_average = []
+    for token_ids, attention_mask in zip(batch['ensemble_token_ids'], batch['ensemble_attention_mask']):
+      logits_to_average.append(_logits_for_ids(model, device, token_ids, attention_mask))
+
+    if bidirectional:
+      for token_ids, attention_mask in zip(
+          batch['reversed_ensemble_token_ids'], batch['reversed_ensemble_attention_mask']):
+        logits_to_average.append(_logits_for_ids(model, device, token_ids, attention_mask))
+
+    logits = torch.stack(logits_to_average, dim=0).mean(dim=0)
+    return logits.cpu().numpy()
+
   b_ids = batch['token_ids'].to(device)
   b_mask = batch['attention_mask'].to(device)
   logits = model(b_ids, b_mask)
@@ -104,7 +121,7 @@ def tune_paraphrase_threshold(dataloader, model, device, bidirectional=False, st
 
 def test_sonnet(
     test_path='predictions/generated_sonnets.txt',
-    gold_path='data/TRUE_sonnets_held_out.txt'
+    gold_path='data/TRUE_sonnets_held_out_dev.txt'
 ):
     chrf = CHRF()  # Character n-gram F-score
 

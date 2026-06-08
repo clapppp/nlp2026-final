@@ -41,26 +41,56 @@ def resolve_device(use_gpu):
   return torch.device('cpu')
 
 
+def nonempty_lines(text):
+  return [line.strip() for line in text.splitlines() if line.strip()]
+
+
 def count_nonempty_lines(text):
-  return sum(1 for line in text.splitlines() if line.strip())
+  return len(nonempty_lines(text))
 
 
-def truncate_to_line_count(text, target_lines):
-  """Keep generated output within the expected sonnet line count."""
+def _split_long_line(line, max_words_per_line):
+  words = line.split()
+  if len(words) <= max_words_per_line:
+    return [line.strip()]
+
+  chunks = []
+  current = []
+  phrase_breaks = ('.', '?', '!', ';', ':', ',')
+  for word in words:
+    current.append(word)
+    phrase_boundary = word.rstrip(chr(34) + chr(39) + ')]} ').endswith(phrase_breaks)
+    if len(current) >= max_words_per_line or (len(current) >= 6 and phrase_boundary):
+      chunks.append(' '.join(current).strip())
+      current = []
+  if current:
+    chunks.append(' '.join(current).strip())
+  return chunks
+
+
+def reshape_to_line_count(text, target_lines, max_words_per_line=10):
+  # Format generated text into a sonnet-like fixed number of non-empty lines.
   if target_lines is None or target_lines <= 0:
     return text.strip()
 
-  kept_lines = []
-  nonempty_lines = 0
-  for line in text.splitlines():
-    kept_lines.append(line.rstrip())
-    if line.strip():
-      nonempty_lines += 1
-    if nonempty_lines >= target_lines:
+  lines = []
+  for line in nonempty_lines(text):
+    lines.extend(_split_long_line(line, max_words_per_line))
+
+  while len(lines) < target_lines:
+    if not lines:
       break
+    split_idx = max(range(len(lines)), key=lambda idx: len(lines[idx].split()))
+    words = lines[split_idx].split()
+    if len(words) <= 1:
+      break
+    mid = max(1, len(words) // 2)
+    lines[split_idx:split_idx + 1] = [
+      ' '.join(words[:mid]).strip(),
+      ' '.join(words[mid:]).strip(),
+    ]
 
-  return "\n".join(kept_lines).strip()
-
+  return '\n'.join(lines[:target_lines]).strip()
 
 # 재현성을 위한 random seed 고정.
 def seed_everything(seed=11711):
@@ -82,7 +112,7 @@ class SonnetGPT(nn.Module):
     self.tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
     self.tokenizer.pad_token = self.tokenizer.eos_token
 
-    # 기본적으로, 전체 모델을 fine-tuning한다. TODO: 이것은 좋은 생각이 아닌 것 같다.
+    # 기본적으로, 전체 모델을 fine-tuning한다.
     for param in self.gpt.parameters():
       param.requires_grad = True
 
@@ -106,9 +136,6 @@ class SonnetGPT(nn.Module):
     """
     top-p sampling 과 softmax temperature를 사용하여 새로운 소넷을 생성한다.
 
-    TODO: 지금 이 방법은 기대 이하일 수 있다. 영감을 얻기 위해 Hugging Face의 model.generate(...) 함수를 참고해도 좋겠다.
-        여러 시퀀스를 생성하고 beam search를 통해 최적의 시퀀스를 선택하는 것도 좋은 한 가지 방법이다.
-        Top-k 샘플링 역시 또 다른 방법이며, 그 외에도 많은 접근법이 있다.
     """
     token_ids = encoding.to(self.get_device())
     attention_mask = torch.ones(token_ids.shape, dtype=torch.int64).to(self.get_device())
@@ -168,11 +195,11 @@ class SonnetGPT(nn.Module):
 
       decoded_output = self.tokenizer.decode(token_ids[0].cpu().numpy().tolist(), skip_special_tokens=True)
       if target_lines and count_nonempty_lines(decoded_output) >= target_lines:
-        generated_output = truncate_to_line_count(decoded_output, target_lines)
+        generated_output = reshape_to_line_count(decoded_output, target_lines)
         return token_ids, generated_output
 
     generated_output = self.tokenizer.decode(token_ids[0].cpu().numpy().tolist(), skip_special_tokens=True)
-    generated_output = truncate_to_line_count(generated_output, target_lines)
+    generated_output = reshape_to_line_count(generated_output, target_lines)
     return token_ids, generated_output
 
 
@@ -253,14 +280,17 @@ def train(args):
       )
       print(f'{output[1]}\n\n')
 
-    # TODO: 소넷의 작은 테이터셋에서 과적합을 방지하기 위한 종료 조건을 생각하시오.
     save_model(model, optimizer, args, f'{epoch}_{args.filepath}')
 
 
 @torch.no_grad()
 def generate_submission_sonnets(args):
   device = resolve_device(args.use_gpu)
-  saved = torch.load(f'{args.epochs-1}_{args.filepath}', weights_only=False)
+  checkpoint_path = args.checkpoint_path or f'{args.epochs-1}_{args.filepath}'
+  if not Path(checkpoint_path).exists():
+    raise FileNotFoundError(
+      f'Cannot find sonnet checkpoint {checkpoint_path}. Run training first or pass --checkpoint_path.')
+  saved = torch.load(checkpoint_path, weights_only=False)
 
   model = SonnetGPT(saved['args'])
   model.load_state_dict(saved['model'])
@@ -307,6 +337,7 @@ def get_args():
   parser.add_argument("--sonnet_path", type=str, default="data/sonnets.txt")
   parser.add_argument("--held_out_sonnet_path", type=str, default="data/sonnets_held_out.txt")
   parser.add_argument("--sonnet_out", type=str, default="predictions/generated_sonnets.txt")
+  parser.add_argument("--checkpoint_path", type=str, default=None)
 
   parser.add_argument("--seed", type=int, default=11711)
   parser.add_argument("--epochs", type=int, default=10)
@@ -328,7 +359,7 @@ def get_args():
   parser.add_argument("--gold_sonnet_path", type=str, default=None)
   parser.add_argument("--skip_train", action='store_true')
   parser.add_argument("--model_size", type=str, help="The model size as specified on hugging face.",
-                      choices=['gpt2', 'gpt2-medium', 'gpt2-large', 'gpt2-xl'], default='gpt2')
+                      choices=['gpt2', 'gpt2-medium', 'gpt2-large'], default='gpt2')
 
   args = parser.parse_args()
   return args
