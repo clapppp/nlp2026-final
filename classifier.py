@@ -308,7 +308,7 @@ def train(args):
 def test(args):
   with torch.no_grad():
     device = torch.device('cuda') if args.use_gpu else torch.device('cpu')
-    saved = torch.load(args.filepath)
+    saved = torch.load(args.filepath, map_location=device, weights_only=False)
     config = saved['model_config']
     model = GPT2SentimentClassifier(config)
     model.load_state_dict(saved['model'])
@@ -331,16 +331,18 @@ def test(args):
     test_pred, test_sents, test_sent_ids = model_test_eval(test_dataloader, model, device)
     print('DONE Test')
 
-    with open(args.dev_out, "w+") as f:
+    with open(args.dev_out, "w+", newline="") as f:
       print(f"dev acc :: {dev_acc :.3f}")
-      f.write(f"id \t Predicted_Sentiment \n")
+      writer = csv.writer(f)
+      writer.writerow(["id", "Predicted_Sentiment"])
       for p, s in zip(dev_sent_ids, dev_pred):
-        f.write(f"{p}, {s} \n")
+        writer.writerow([p, s])
 
-    with open(args.test_out, "w+") as f:
-      f.write(f"id \t Predicted_Sentiment \n")
+    with open(args.test_out, "w+", newline="") as f:
+      writer = csv.writer(f)
+      writer.writerow(["id", "Predicted_Sentiment"])
       for p, s in zip(test_sent_ids, test_pred):
-        f.write(f"{p}, {s} \n")
+        writer.writerow([p, s])
 
 
 def get_args():
@@ -354,10 +356,13 @@ def get_args():
 
   parser.add_argument("--batch_size", help='sst: 64, cfimdb: 8 can fit a 12GB GPU', type=int, default=8)
   parser.add_argument("--hidden_dropout_prob", type=float, default=0.3)
-  parser.add_argument("--lr", type=float, help="learning rate, default lr for 'pretrain': 1e-3, 'finetune': 1e-5",
-                      default=1e-3)
+  parser.add_argument("--lr", type=float,
+                      help="learning rate; defaults to 1e-3 for last-linear-layer and 1e-5 for full-model",
+                      default=None)
 
   args = parser.parse_args()
+  if args.lr is None:
+    args.lr = 1e-5 if args.fine_tune_mode == "full-model" else 1e-3
   return args
 
 

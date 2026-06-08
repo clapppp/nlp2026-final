@@ -45,19 +45,6 @@ class AdamW(Optimizer):
                 # Access hyperparameters from the `group` dictionary.
                 alpha = group["lr"]
 
-                '''
-                TODO: AdamW 구현을 완성하시오. 
-                    위의 state 딕셔너리를 사용하여 상태를 읽고 저장하시오.
-                    하이퍼파라미터는 `group` 딕셔너리에서 읽을 수 있다(생성자에 저장된 lr, betas, eps, weight_decay).
-
-                        이 구현을 완성하기 위해서 해야할 일들:
-                          1. 그래디언트의 1차 모멘트(첫 번째 모멘트)와 2차 모멘트(두 번째 모멘트)를 업데이트.
-                          2. Bias correction을 적용(https://arxiv.org/abs/1412.6980 에 제공된 "efficient version" 사용; 프로젝트 설명의 pseudo-code에도 포함됨).
-                          3. 파라미터(p.data)를 업데이트.
-                          4. 그래디언트 기반의 메인 업데이트 후 weight decay 적용.
-
-                        자세한 내용은 기본 프로젝트 안내문을 참조할 것.
-                '''
                 # state 초기화 (처음 호출될 때만)
                 if len(state) == 0:
                     state["step"] = 0
@@ -73,9 +60,12 @@ class AdamW(Optimizer):
                 v.mul_(beta2).addcmul_(grad, grad, value=1 - beta2)
 
                 # 2. Bias correction
-                bias_correction1 = 1 - beta1 ** state["step"]
-                bias_correction2 = 1 - beta2 ** state["step"]
-                step_size = alpha * math.sqrt(bias_correction2) / bias_correction1
+                if group["correct_bias"]:
+                    bias_correction1 = 1 - beta1 ** state["step"]
+                    bias_correction2 = 1 - beta2 ** state["step"]
+                    step_size = alpha * math.sqrt(bias_correction2) / bias_correction1
+                else:
+                    step_size = alpha
 
                 # 3. 파라미터 업데이트
                 p.data.addcdiv_(m, v.sqrt().add_(group["eps"]), value=-step_size)
