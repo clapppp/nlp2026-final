@@ -36,6 +36,67 @@ from optimizer import AdamW
 
 TQDM_DISABLE = False
 
+
+def parse_gpu_ids(gpu_ids):
+  if gpu_ids is None:
+    return None
+
+  gpu_ids = str(gpu_ids).strip()
+  if not gpu_ids or gpu_ids.lower() == 'all':
+    return None
+
+  try:
+    parsed = [int(gpu_id.strip()) for gpu_id in gpu_ids.split(',') if gpu_id.strip()]
+  except ValueError as exc:
+    raise ValueError(f"--gpu_ids must be a comma-separated list of integers, got: {gpu_ids}") from exc
+
+  if not parsed:
+    return None
+  if any(gpu_id < 0 for gpu_id in parsed):
+    raise ValueError(f"--gpu_ids must be non-negative CUDA device ids, got: {gpu_ids}")
+  return parsed
+
+
+def resolve_device(args):
+  if not args.use_gpu:
+    return torch.device('cpu')
+
+  gpu_ids = parse_gpu_ids(getattr(args, 'gpu_ids', None))
+  if gpu_ids:
+    return torch.device(f'cuda:{gpu_ids[0]}')
+  return torch.device('cuda')
+
+
+def maybe_data_parallel(model, args):
+  if not args.use_gpu or not getattr(args, 'multi_gpu', False):
+    return model
+
+  available_gpus = torch.cuda.device_count()
+  if available_gpus < 2:
+    print('Requested multi-GPU training, but fewer than 2 CUDA devices are visible; using single GPU.')
+    return model
+
+  device_ids = parse_gpu_ids(getattr(args, 'gpu_ids', None))
+  if device_ids is None:
+    device_ids = list(range(available_gpus))
+
+  invalid_ids = [gpu_id for gpu_id in device_ids if gpu_id >= available_gpus]
+  if invalid_ids:
+    raise ValueError(
+      f"Requested CUDA device ids {invalid_ids}, but only {available_gpus} CUDA devices are visible.")
+
+  if len(device_ids) < 2:
+    print(f'Requested multi-GPU training with device ids {device_ids}; using single GPU.')
+    return model
+
+  print(f'Using DataParallel on CUDA devices: {device_ids}')
+  return nn.DataParallel(model, device_ids=device_ids, output_device=device_ids[0])
+
+
+def unwrap_model(model):
+  return model.module if isinstance(model, nn.DataParallel) else model
+
+
 # Fix the random seed.
 def seed_everything(seed=11711):
   random.seed(seed)
@@ -89,7 +150,7 @@ class ParaphraseGPT(nn.Module):
 
 def save_model(model, optimizer, args, filepath):
   save_info = {
-    'model': model.state_dict(),
+    'model': unwrap_model(model).state_dict(),
     'optim': optimizer.state_dict(),
     'args': args,
     'system_rng': random.getstate(),
@@ -118,6 +179,7 @@ CHECKPOINT_RUNTIME_ARGS = (
   "filepath",
   "batch_size",
   "use_gpu",
+  "gpu_ids",
 )
 
 CHECKPOINT_EVAL_ARGS = (
@@ -151,7 +213,7 @@ def build_checkpoint_eval_args(checkpoint_args, cli_args):
 
 def train(args):
   """Quora 데이터셋에서 Paraphrase Detection을 위한 GPT-2 훈련."""
-  device = torch.device('cuda') if args.use_gpu else torch.device('cpu')
+  device = resolve_device(args)
   # 데이터, 해당 데이터셋 및 데이터로드 생성하기.
   para_train_data = load_paraphrase_data(args.para_train)
   para_dev_data = load_paraphrase_data(args.para_dev)
@@ -176,6 +238,7 @@ def train(args):
   args = add_arguments(args)
   model = ParaphraseGPT(args)
   model = model.to(device)
+  model = maybe_data_parallel(model, args)
 
   lr = args.lr
   optimizer = AdamW(model.parameters(), lr=lr, weight_decay=args.weight_decay)
@@ -227,7 +290,7 @@ def train(args):
 
 @torch.no_grad()
 def test(args):
-  device = torch.device("cuda") if args.use_gpu else torch.device("cpu")
+  device = resolve_device(args)
   saved = torch.load(args.filepath, map_location=device, weights_only=False)
   model_args = saved["args"]
   if not all(hasattr(model_args, name) for name in ("d", "l", "num_heads")):
@@ -237,6 +300,7 @@ def test(args):
   model = ParaphraseGPT(model_args)
   model.load_state_dict(saved["model"])
   model = model.to(device)
+  model = maybe_data_parallel(model, args)
   model.eval()
   print(f"Loaded model to test from {args.filepath}")
   if getattr(args, "override_checkpoint_eval_args", False):
@@ -290,6 +354,10 @@ def get_args():
   parser.add_argument("--seed", type=int, default=11711)
   parser.add_argument("--epochs", type=int, default=10)
   parser.add_argument("--use_gpu", action='store_true')
+  parser.add_argument("--multi_gpu", action='store_true',
+                      help="use torch.nn.DataParallel across multiple visible CUDA devices")
+  parser.add_argument("--gpu_ids", type=str, default=None,
+                      help="comma-separated CUDA device ids to use, e.g. '0,1,2'; default uses all visible GPUs")
   parser.add_argument("--bidirectional_eval", action='store_true',
                       help="average logits from (sentence1, sentence2) and (sentence2, sentence1) prompts at eval/test time")
   parser.add_argument("--prompt_template", type=str, default="paraphrase",
@@ -326,7 +394,7 @@ def get_args():
   parser.add_argument("--early_stopping_patience", type=int, default=0,
                       help="stop training after this many non-improving dev epochs; 0 disables it")
 
-  parser.add_argument("--batch_size", help='sst: 64, cfimdb: 8 can fit a 12GB GPU', type=int, default=8)
+  parser.add_argument("--batch_size", help='training batch size; 128 is safe for GPT-2 on the 96GB Blackwell GPUs', type=int, default=128)
   parser.add_argument("--lr", type=float, help="learning rate", default=1e-5)
   parser.add_argument("--model_size", type=str,
                       help="The model size as specified on hugging face. DO NOT use the xl model.",
