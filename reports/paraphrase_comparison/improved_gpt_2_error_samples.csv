@@ -1,0 +1,81 @@
+error_type,id,label,pred,jaccard,length_bucket,sentence1,sentence2
+FP,154886 c5a6626e-a1ce-4c39-b09c-8abd67f30496,0,1,1.0,short-short,What type of guys do girls like?,What type of girls do guys like?
+FP,75831 39e8459c-10d3-43fe-a57b-48f517afa3c8,0,1,1.0,short-short,How should I learn to code?,Should I learn how to code?
+FP,149351 d0e326d0-789d-49c0-8bec-297fef85ce87,0,1,1.0,medium-long,Is competitive bidding legal in industrial sector? If so are there any restrictions in doing so?,Is competitive bidding is legal in industrial sector? If so are there any restrictions in doing so?
+FP,51611 4b9294c2-c4f9-4c8e-aea8-db47f8bb5242,0,1,1.0,medium-medium,What is the difference between eddy current loss & hysteresis loss?,What is the difference between Hysteresis loss & Eddy current loss?
+FP,144862 eb60262e-eb8a-4afa-afae-4f25b3da6084,0,1,1.0,short-short,Do women cheat more than men?,Do more women cheat than men?
+FP,380819 94d88370-23c5-43f1-aeef-71d26c94b891,0,1,0.9375,medium-medium,How many hours should I charge my new Vivo X7 phone for the first time?,How many hours should I charge my new Vivo X7 phone for the first time? Request
+FP,158615 5447c82d-9eb2-412e-8c26-dfcf02ecad52,0,1,0.9375,medium-medium,What new paradigms do you think may be significant in the future of interactive computing? [,What new paradigms do you think may be significant in the future of interactive computing?
+FP,190305 ad4311db-040c-4961-8547-22249e8d5cf9,0,1,0.9285714285714286,medium-medium,Which people should I meet in New York City if I'm interested in startups?,Which people should I meet in New York City if I'm interested in tech startups?
+FP,363926 a0069102-f0f0-4342-8909-a407165d7eb2,0,1,0.9285714285714286,medium-medium,What are the first signs of a homosexual person turning straight or bisexual?,What are the first signs of a straight person turning into a homosexual or bisexual?
+FP,287688 5cb2e2a1-5f09-4e93-89e4-7a5cfb44d702,0,1,0.9230769230769231,medium-medium,How do I convince youth to celebrate Indian festivals in the traditional way?,How do I convince youth to celebrate Indian festivals in traditional way?
+FP,286445 3190cbc8-fa71-4cc3-88fd-61c340b75959,0,1,0.9230769230769231,medium-medium,Why are lenders obligated to report delinquencies under the Fair Credit Reporting Act?,Are lenders obligated to report delinquencies under the Fair Credit Reporting Act?
+FP,78271 9f29cb4a-2142-4b6a-bc4a-bc0e569191e3,0,1,0.9166666666666666,long-long,"I am 17 now, how can I ""earn"" my first house or Lamborghini within 5 years? (One of my hobbies is Animation if that matters.)","I am 17 now, how can I ""earn"" my first house or Lamborghini within 5 years? (One of my hobbies is Animation if that matters.)?"
+FP,200013 35dbc53c-a998-4371-8725-75a59b2825f0,0,1,0.9166666666666666,medium-medium,Is anybody there who could work on ANSYS for an assignment?,Is anybody there who could work on ANSYS software for an assignment?
+FP,130762 6fde0370-afa7-4d5e-8021-e0bc0c72040c,0,1,0.9090909090909091,medium-medium,Can I make a career out of investing in stocks?,How can I make a career out of investing in stocks?
+FP,180609 d53bd777-4c10-4b78-a1cc-630e538d9dd7,0,1,0.9,medium-medium,Why is Moses just the imaginary and only Jewish friend?,Why is Moses the imaginary and only Jewish friend?
+FP,343188 8349e0fa-9592-4c24-b8f0-0475fecae997,0,1,0.9,medium-medium,Which is the best SAP Training institute in Noida?,Which is the best SAP PM training institute in Noida?
+FP,130846 0d6a6abd-acf6-46f8-a052-638e3298b2bf,0,1,0.9,medium-medium,Which book is the best for organic chemistry for JEE?,Which is the best theoretical book for organic chemistry for JEE?
+FP,60746 55ab24d3-2582-4156-9b4f-58f1f50b6e4e,0,1,0.9,medium-medium,What are some of the innovative startups in India?,What are some of the new innovative startups in India?
+FP,44935 15787afe-952d-4783-a5d2-57614b1a9794,0,1,0.9,medium-medium,How can I convert categorical data to continuous data?,How can I convert the categorical data to continuous data?
+FP,167046 578848f3-1abc-4f9d-be20-a5f86fa58018,0,1,0.9,medium-medium,Does losing one of the five senses enhance the others?,Does losing one of the five senses enhance the others? How?
+FP,304816 b9e9654b-6e34-45dc-a7b6-9c018eb7362b,0,1,0.8888888888888888,long-long,What are the cons of self redevelopment of a cooperative housing society as opposed to giving the redevelopment contract to a builder?,What are the pros of self redevelopment of a cooperative housing society as opposed to giving the redevelopment contract to a builder?
+FP,361582 0a73010a-c110-4f82-9173-561c5ebe49e0,0,1,0.8888888888888888,medium-medium,"I want to learn hacking, what should I do?","If I want to learn hacking, what should I do?"
+FP,48971 28ba6073-57f9-4ea5-a19e-3a5fec2a0e76,0,1,0.8888888888888888,short-medium,How do I get rid of useless thoughts?,How do I get rid of obsessive useless thoughts?
+FP,186971 561e7dd1-3771-4431-9e47-909b7a427723,0,1,0.8888888888888888,short-medium,What is your favorite thing in the world?,What is your favorite thing in the world? Why?
+FP,293452 a5102903-b318-4a8d-bddd-2ad5eb1cf801,0,1,0.8888888888888888,medium-medium,How do I convince my wife that I love her?,How do I convince my wife I love her?
+FP,180094 36bc323b-1fd9-46d6-a226-14add0bd788b,0,1,0.8888888888888888,medium-short,Where can I legally download Korean dramas for free?,Where can I download Korean dramas for free?
+FP,303151 b9c59662-a3c2-4e18-8330-45e357501bb1,0,1,0.8888888888888888,short-medium,What are the top job portals in India?,What are the top 10 job portals in India?
+FP,330820 f24f3b3e-5a36-4b2b-9e38-fa4d2f04923d,0,1,0.875,long-long,"What was the significance of the battle of Somme, and how did this battle compare and contrast to the Battle of Bale?","What was the significance of the battle of Somme, and how did this battle compare and contrast to the Battle of Mill?"
+FP,335553 3df55e7c-7156-4db4-afe5-8d239b1266d2,0,1,0.875,short-short,What is the longest train route in India?,What is the longest train in India?
+FP,170867 191950a2-82dd-4a43-a89a-92c0557d7b8c,0,1,0.875,medium-medium,How high is the resolution of still images captured during video recording with the iPhone 5?,How high is the resolution of still images captured during video recording with the iPhone 5s?
+FP,41 cbc52b8b-c0a7-4832-b4ee-ca46dbf98043,0,1,0.875,short-short,When can I expect my Cognizant confirmation mail?,When can I expect Cognizant confirmation mail?
+FP,247702 984023de-0bd7-4fd9-a9af-c44ebffb3845,0,1,0.875,long-long,What is the best time to give the GRE if I want to apply for fall 2016?,What is the best time to take the GRE if I want to apply for fall 2016?
+FP,383935 22af1522-4e39-4ce9-a9f4-78335326c441,0,1,0.875,medium-short,What is love? What limit one should maintain in love?,What limit one should maintain in love?
+FP,7980 0cfbcc42-58af-445b-9c91-5af195fc8504,0,1,0.875,short-short,Do dentists earn more than other doctors?,Do dentists earn more than other doctors? Why?
+FP,247603 f4b09e77-2ab5-4873-b212-c277f79abf93,0,1,0.875,short-short,How do I become a senior software engineer?,How do I become a software engineer?
+FP,189383 915532bf-3ace-46d3-9419-822e91e26f37,0,1,0.875,short-short,What is the purpose of acknowledging a receipt?,What is the purpose of a receipt?
+FP,179823 6abd955b-1948-4358-93ce-6f0fe29c7397,0,1,0.875,short-short,Why do Asian girls like white guys?,Why do asian girls like dating white guys?
+FP,291601 5121ad06-620d-4cc9-ae25-aca8f62d58e0,0,1,0.8571428571428571,short-short,What should do with my money?,What should I do with my money?
+FP,83239 5f716f27-f30e-461c-8152-f96242d880eb,0,1,0.8571428571428571,short-short,What are the sources of history?,What are the sources of modern history?
+FP,312339 0018cd30-95d6-42c5-941f-c370e33c21f7,0,1,0.8571428571428571,short-short,How does weed help you lose weight?,Does weed help you lose weight?
+FN,164232 d2bad935-285a-431c-9ca4-74d8db76aa24,1,0,0.0625,medium-medium,"When should I use ""who"" and when should I use ""whom""?",How can we use who or whom in a sentence?
+FN,216975 11477a68-5ff5-4d40-9818-15b22f12fc1c,1,0,0.06666666666666667,short-medium,How was your Jagriti Yatra experience?,What is it like to participate in the Jagriti Yatra?
+FN,36528 c3ad4614-bcae-4aa6-8ebc-d5b18be2dc79,1,0,0.07142857142857142,medium-short,What should be done to get rid of laziness?,How do I get over procastination?
+FN,182117 e67d728a-97a1-45eb-9f2b-174fe7a09ae3,1,0,0.07142857142857142,short-short,How do I stay peaceful and happy?,What is the easiest way to be happy?
+FN,14376 69c38245-b145-46ae-8d28-939f550f5143,1,0,0.07692307692307693,short-short,How did you expand your vocabulary?,What is the best way to learn vocabulary?
+FN,143422 819fa350-b4c8-4a13-aae7-96ef979c95b1,1,0,0.07692307692307693,medium-short,What are the reasons people cheat on their partners?,Why does people to cheat?
+FN,350784 e69b9426-133d-466e-a9c5-17b8f943b14c,1,0,0.08333333333333333,short-short,Where can I learn UX/UI?,What is the best way to learn UI/UX?
+FN,217241 9f845f7c-4cd7-4c5a-9921-954f8456a829,1,0,0.08333333333333333,short-short,What forex brokers can be trusted?,How do I choose a forex broker?
+FN,350602 75cc505d-b9e0-4bb0-9f08-43ae3e55b62e,1,0,0.08333333333333333,medium-short,Where can I find angel investors for an invention?,Who are angel investors?
+FN,37002 a6b5f4c4-bc47-43e1-b7ff-51285f8db06c,1,0,0.08695652173913043,medium-medium,How can we improve the education system for high school and college?,What some things you would like to fix in high school public education?
+FN,396983 27d6a635-109f-49e4-a1d5-80d98c11c375,1,0,0.09090909090909091,short-short,How does it feel to be dead?,What would dying feel like?
+FN,63012 0653ca56-1411-4a06-8cb3-04039a2f2461,1,0,0.09090909090909091,short-short,What is the use of confidence interval?,How are confidence intervals used?
+FN,7571 064a66fe-884e-4957-9d38-05b18cea0c3f,1,0,0.09090909090909091,short-short,What is git hub?,How can I start learning Git and Github?
+FN,123891 8e4241e1-d767-4669-b79d-2e1ccacbcf1f,1,0,0.1,short-short,What is the use of science?,Why do we need science?
+FN,186226 3de565b3-de4d-43cd-999c-594c1de06916,1,0,0.1,medium-medium,How do you stay home and make money in your pajamas?,What are some good ways to make money sitting at home?
+FN,357488 58dc23ab-4c0c-48fa-9136-b1537eade138,1,0,0.1,short-short,How do we know Plastic is non-biodegradable?,Why isn't plastic biodegradable?
+FN,26779 3294c502-0041-47e9-9519-1d5a4f409f3b,1,0,0.1,short-short,"Who are ""Quora Users""?","What does followed by ""Quora User"" mean?"
+FN,36342 2e9ec632-4f17-4148-9291-97f31bc8ca00,1,0,0.1,short-short,Why apple is so expensive?,Are Apple products overrated and overpriced?
+FN,384493 10d1021f-a867-464e-bd2c-a6854b0d5107,1,0,0.1,short-short,What is it like to be raped?,Have you been raped?
+FN,79545 f8f4f6be-79bc-4976-984a-c2c77b8c491e,1,0,0.1,short-short,Is Rummycircle real or fake?,Are the Rummycircle games for real?
+FN,344281 24be94d9-41d4-4166-85f8-510f3681f0c2,1,0,0.1,short-short,How I use this Quora?,What after signing up on Quora?
+FN,154206 d5ae2d72-c7fa-4562-b6ee-7f5faa55f61a,1,0,0.1,short-short,Is homosexuality observed in animals?,Why are there no gay animals?
+FN,68669 d9061808-6818-475f-8056-6230b634ea47,1,0,0.1,medium-short,Are there any music apps that I can listen to without needing an Internet connection?,What app for music without wifi for iPod?
+FN,195836 9d9697fe-9caf-45ba-8370-aa139f1d7bda,1,0,0.1,short-short,Can we prove 0! =1?,Why is 0! equal to 1?
+FN,212508 b6d89a8d-18d8-480c-ac59-a77119dcdc68,1,0,0.1,short-short,What should someone do to overcome anxiety?,Can one overcome depression?
+FN,174241 797c154d-ece6-4dd2-a313-66cb670fd9e3,1,0,0.10526315789473684,medium-medium,Is it recommended to store a bottle of Bailey's in the fridge?,How do you store Bailey's Irish Cream after opening?
+FN,229273 d95191d0-6d25-444b-a6e9-f4c5086b55bf,1,0,0.10526315789473684,medium-short,How can I make a plan to lose 12-15 pounds in 2-3 months?,What will make me lose the most fat?
+FN,8230 cb5afa1f-e329-42a4-a64b-1fc6e185f9a2,1,0,0.1111111111111111,medium-short,Why won't Quora let me delete my question or edit the extra details?,How do I delete a Quora question?
+FN,195466 89fbb529-fb78-4758-aba6-c3e01c323cdd,1,0,0.1111111111111111,short-short,How does computer networking work?,What is a computer network?
+FN,275056 abf30214-8fcd-48ee-ad87-88cc97ff2b1a,1,0,0.1111111111111111,medium-medium,Which is effective - Mobile app or Mobile site or both? Why?,What are the advantages of a Mobile App vs a Mobile Site?
+FN,162244 87753adf-94ae-4303-901f-359383aa400a,1,0,0.1111111111111111,short-short,How do crop circles form?,What is a crop circle?
+FN,341183 e40e15a0-510b-4094-a044-a7927662ba4a,1,0,0.1111111111111111,short-short,Who invented tennis?,What is the name of inventorier of tennis?
+FN,398663 fb7d7439-e359-467c-a92c-1db36cba0c61,1,0,0.1111111111111111,short-short,Do we need smaller states?,Should India have more states?
+FN,188682 151a01bf-8815-46bd-a077-52547f303cc0,1,0,0.1111111111111111,medium-short,What is the best method to compare and contrast photosynthesis and cellular respiration?,How does respiration compare or contrast with photosynthesis?
+FN,265108 eda777c0-3e89-4835-ae1a-dd4ac8b8f260,1,0,0.1111111111111111,medium-medium,Is it interesting to work as a cyber security?,What are the ups and downs of working in cyber security?
+FN,14494 e6f034a9-8185-47da-8bbd-997eeb4563ac,1,0,0.1111111111111111,medium-short,Can I use short clips from copyrighted songs in my YouTube videos?,How do you use copyrighted music on youtube?
+FN,81334 dfbc5f27-65d9-401c-ba0d-53c85602d5c1,1,0,0.11538461538461539,medium-medium,How will a gap of two years after earning a mechanical B.Tech affect my career?,What are all the available options for government jobs after completing B.Tech in mechanical engineering?
+FN,327874 b7f3505b-0b2e-472a-ac4c-7b8730dfc466,1,0,0.11764705882352941,medium-medium,When can women get pregnant in the menstrual cycle?,Is it possible to get pregnant before your regular period?
+FN,31061 c70d30de-9a3d-4043-95a3-e0f00bd04fc4,1,0,0.11764705882352941,medium-short,Why can't Pirate Bay just be stopped by raiding their servers?,How do websites like The Pirate Bay survive?
+FN,332241 9de48da0-d3ce-49d5-ac6e-668e6abcf804,1,0,0.11764705882352941,medium-medium,Creative Commons: Where can I find good CC-licensed music?,What are the best sites to download Creative Commons music?
