@@ -58,77 +58,32 @@ GPT-2를 단순히 라이브러리(예: HuggingFace `transformers`)를 통해 �
 
 > **직접 작성한 코드 명시.** 제공된 스타터 코드의 빈 블록 중, 본 팀이 직접 구현한 부분은 다음과 같다: `modules/attention.py`의 `CausalSelfAttention.attention()`, `modules/gpt2_layer.py`의 `GPT2Layer.forward()` 및 `add()`, `models/gpt2.py`의 forward 경로, `optimizer.py`의 `AdamW.step()`, `classifier.py`의 `GPT2SentimentClassifier`(분류 헤드 및 forward)와 학습 루프의 누락 블록. 클래스 골격·설정(`config.py`)·유틸리티(`utils.py`)·테스트 스크립트(`sanity_check.py`, `optimizer_test.py`)는 과제에서 제공된 것을 그대로 사용하였다.
 
-### 3.1 Causal Self-Attention
+> GPT-2 아키텍처와 AdamW는 표준 정의를 따르므로 본 절에서는 핵심만 간략히 기술하고, 본 연구의 분석적 기여는 4장(실험)에 집중한다.
 
-입력 은닉 상태 $X \in \mathbb{R}^{B \times T \times H}$에 대해 query/key/value를 선형 변환으로 사영하고, $h$개의 헤드로 분할한다($d_k = H/h$). 각 헤드에서 scaled dot-product attention을 계산한다:
+### 3.1 GPT-2 아키텍처
 
-$$
-\text{Attention}(Q,K,V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}} + M_{\text{causal}} + M_{\text{pad}}\right) V
-$$
+GPT-2는 디코더-only Transformer로, 각 블록이 Causal Self-Attention과 Feed-Forward로 구성되며 두 서브레이어 **이전**에 Layer Normalization을 적용하는 Pre-LayerNorm 구조를 따른다. 핵심은 **인과 마스킹**으로, attention 점수의 상삼각(미래 토큰) 위치를 $-\infty$로 만들어 각 토큰이 과거 토큰만 참조하게 한다:
 
-여기서 인과 마스크 $M_{\text{causal}}$는 상삼각(strictly upper-triangular) 위치를 $-\infty$로 설정하여 각 위치가 미래 토큰을 참조하지 못하도록 한다:
+$$\text{Attention}(Q,K,V)=\text{softmax}\!\left(\tfrac{QK^\top}{\sqrt{d_k}}+M_{\text{causal}}+M_{\text{pad}}\right)V$$
 
-$$
-(M_{\text{causal}})_{ij} = \begin{cases} -\infty & j > i \\ 0 & j \le i \end{cases}
-$$
+구현(`modules/attention.py`)에서는 `torch.triu(..., diagonal=1)`로 인과 마스크를 만들고 패딩 마스크는 점수에 가산한다. 블록(`modules/gpt2_layer.py`)은 (LN→Attention→Dropout→잔차) 후 (LN→FFN(GELU)→Dropout→잔차) 순으로 진행되고, 전체 모델(`models/gpt2.py`)은 토큰+위치 임베딩 → $L$개 블록 → 최종 LN을 거친다. 감정 분류에는 시퀀스 **마지막 토큰**의 표현을 사용한다.
 
-$M_{\text{pad}}$는 패딩 위치를 큰 음수로 만들어 softmax 이후 가중치가 0에 수렴하게 한다. 구현에서는 `torch.triu(..., diagonal=1)`로 인과 마스크를 생성한 뒤 `masked_fill`로 적용하고, 패딩 마스크는 점수에 가산한다. 정규화된 attention 가중치에 dropout을 적용한 후 $V$와 곱하여 컨텍스트 벡터를 얻고, 멀티헤드를 다시 $H$ 차원으로 결합한다.
+### 3.2 AdamW 옵티마이저
 
-### 3.2 Pre-LayerNorm Transformer 블록
+`optimizer.py`의 `step()`에서 Adam의 1·2차 모멘트 추정과 편향 보정을 구현하고, **가중치 감쇠를 그래디언트 갱신과 분리(decoupled weight decay)하여** 적용한다 — 적응적 학습률 갱신 $\theta \leftarrow \theta - \alpha\,\hat m/(\sqrt{\hat v}+\epsilon)$ 이후 정규화 항 $\theta \leftarrow \theta - \alpha\lambda\theta$를 별도로 적용하는 것이 AdamW의 핵심이다.
 
-GPT-2는 각 서브레이어 **이전**에 Layer Normalization을 적용하는 Pre-LayerNorm 구조를 사용한다. 블록의 연산은 다음과 같다:
+### 3.3 감정 분류 헤드와 미세조정 전략
 
-$$
-\begin{aligned}
-H' &= H + \text{Dropout}\big(W_o \cdot \text{Attention}(\text{LN}_1(H))\big) \\
-H'' &= H' + \text{Dropout}\big(W_2 \cdot \text{GELU}(W_1 \cdot \text{LN}_2(H'))\big)
-\end{aligned}
-$$
+`GPT2SentimentClassifier`는 마지막 토큰 표현에 dropout과 선형 사영을 적용해 클래스 로짓을 산출한다(클래스 수 $C$: SST 5, CFIMDB 2). 학습은 두 전략을 **통제 비교**한다:
 
-즉 (LN → Attention → Dense → Dropout → 잔차합) 후 (LN → FFN → Dropout → 잔차합) 순서로 진행된다. 헬퍼 `add(input, output, dense, dropout)`는 `input + dropout(dense(output))`을 수행하며, 이 단계에서는 Layer Normalization을 적용하지 않는다(LN은 서브레이어 입력에서 이미 적용됨).
+- **last-linear-layer:** GPT-2를 동결(`requires_grad=False`)하고 분류 헤드만 학습 → 사전학습 표현의 전이 가능성 평가.
+- **full-model:** GPT-2 전체를 갱신 → 표현 자체를 태스크에 적응.
 
-### 3.3 GPT-2 모델
+### 3.4 구현 검증
 
-토큰 임베딩과 학습 가능한 위치 임베딩(learnable positional embedding)을 더한 뒤 $L$개의 `GPT2Layer`를 통과시키고, 마지막에 최종 Layer Normalization을 적용한다. 감정 분류에는 시퀀스의 **마지막 토큰**의 은닉 표현을 문장 표현으로 사용한다. 구현 정합성은 HuggingFace `GPT2Model`과 동일 입력에 대한 마지막 은닉 상태를 비교하여(`atol=0.1, rtol=0.01`) 검증하였다.
+두 구현은 객관적 기준으로 정합성을 확인하였다: GPT-2는 HuggingFace 공식 모델과 마지막 은닉 상태가 `atol=0.1`에서 일치하고(`sanity_check.py`), AdamW는 1,000 스텝 학습 후 가중치가 참조값과 `atol=1e-6`에서 일치한다(`optimizer_test.py`).
 
-### 3.4 AdamW 옵티마이저
-
-각 파라미터 $\theta$에 대해 1차/2차 모멘트를 지수이동평균으로 갱신한다:
-
-$$
-m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t, \qquad
-v_t = \beta_2 v_{t-1} + (1-\beta_2) g_t^2
-$$
-
-편향 보정을 반영한 스텝 크기는 다음과 같다:
-
-$$
-\text{step\_size} = \alpha \cdot \frac{\sqrt{1-\beta_2^{\,t}}}{1-\beta_1^{\,t}}, \qquad
-\theta_t \leftarrow \theta_{t-1} - \text{step\_size}\cdot\frac{m_t}{\sqrt{v_t}+\epsilon}
-$$
-
-마지막으로, 가중치 감쇠를 그래디언트 갱신과 **분리하여** 적용한다(AdamW의 핵심):
-
-$$
-\theta_t \leftarrow \theta_t - \alpha\,\lambda\,\theta_t
-$$
-
-여기서 $\lambda$는 weight decay 계수다. 구현은 `optimizer_test.py`의 1,000 스텝 학습 결과를 참조 가중치(`optimizer_test.npy`)와 비교하여 `atol=1e-6, rtol=1e-4` 수준으로 일치함을 확인하였다.
-
-### 3.5 감정 분류 헤드와 미세조정 전략
-
-`GPT2SentimentClassifier`는 GPT-2가 출력한 마지막 토큰 표현 $z \in \mathbb{R}^{H}$에 dropout과 선형 사영을 적용하여 클래스 로짓을 산출한다:
-
-$$
-\text{logits} = W_{\text{cls}} \cdot \text{Dropout}(z) + b_{\text{cls}}, \qquad W_{\text{cls}} \in \mathbb{R}^{C \times H}
-$$
-
-SST는 $C=5$, CFIMDB는 $C=2$이다. 학습은 두 가지 전략으로 수행한다:
-
-- **last-linear-layer:** GPT-2 파라미터를 동결(`requires_grad=False`)하고 분류 헤드만 학습한다. 사전학습된 표현의 전이 가능성을 평가한다.
-- **full-model:** GPT-2 전체 파라미터를 함께 갱신한다. 태스크에 맞춰 표현 자체를 적응시킨다.
-
-### 3.6 기준 모델 (Baseline)
+### 3.5 기준 모델 (Baseline)
 
 지정 주제 과제에서 제공한 기준 모델은 본 구현이 도달해야 할 표준 성능을 정의한다. 과제 명세에 따른 dev 정확도 기준값은 다음과 같다:
 
@@ -208,6 +163,14 @@ SST / full-model (5-class, 오분류가 인접 등급에 집중):
 | **T2 (neutral)** | 10 | 68 | 65 | 83 | 3 |
 | **T3 (pos)** | 1 | 16 | 27 | 201 | 34 |
 | **T4 (very pos)** | 1 | 1 | 6 | 90 | 67 |
+
+**SST 클래스별 F1 (full-model).** 등급별 난이도 차이를 정량적으로 보여준다.
+
+| 클래스 | 0 (very neg) | 1 (neg) | 2 (neutral) | 3 (pos) | 4 (very pos) |
+|---|---|---|---|---|---|
+| F1 | 0.362 | 0.601 | **0.342** | 0.585 | 0.498 |
+
+중앙(neutral)과 양 극단(very neg/pos)의 F1이 낮고, 다수 클래스인 neg/pos가 높다 — 경계가 모호한 등급일수록 어렵다는 직관과 일치한다.
 
 **결과에 대한 논의.**
 
