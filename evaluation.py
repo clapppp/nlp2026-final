@@ -135,3 +135,23 @@ def test_sonnet(
     # compute chrf
     chrf_score = chrf.corpus_score(generated_sonnets, [true_sonnets])
     return float(chrf_score.score)
+
+
+def _strip_prompt_lines(sonnet, prompt_line_count=3):
+  lines = [line.strip() for line in sonnet.splitlines() if line.strip()]
+  return '\n'.join(lines[prompt_line_count:])
+
+
+def test_sonnet_continuation(
+    test_path='predictions/generated_sonnets.txt',
+    gold_path='data/TRUE_sonnets_held_out_dev.txt',
+    prompt_line_count=3
+):
+  chrf = CHRF()
+  generated_sonnets = [_strip_prompt_lines(x[1], prompt_line_count) for x in SonnetsDataset(test_path)]
+  true_sonnets = [_strip_prompt_lines(x[1], prompt_line_count) for x in SonnetsDataset(gold_path)]
+  max_len = min(len(true_sonnets), len(generated_sonnets))
+  true_sonnets = true_sonnets[:max_len]
+  generated_sonnets = generated_sonnets[:max_len]
+  chrf_score = chrf.corpus_score(generated_sonnets, [true_sonnets])
+  return float(chrf_score.score)
