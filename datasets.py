@@ -10,6 +10,7 @@ import csv
 
 import re
 import torch
+from pathlib import Path
 
 from torch.utils.data import Dataset
 from transformers import GPT2Tokenizer
@@ -246,32 +247,44 @@ def load_paraphrase_data(paraphrase_filename, split='train'):
 
 
 class SonnetsDataset(Dataset):
-  def __init__(self, file_path):
+  def __init__(self, file_path, append_eos=False):
     self.tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+    self.append_eos = append_eos
 
     self.tokenizer.pad_token = self.tokenizer.eos_token
     self.sonnets = self._load_sonnets(file_path)
 
   def _load_sonnets(self, file_path):
     """Reads the file and extracts individual sonnets."""
-    with open(file_path, 'r', encoding='utf-8') as f:
-      text = f.read()
+    text = Path(file_path).read_text(encoding='utf-8')
 
-    # Split sonnets based on numbering pattern (e.g., "\n\n1\n\n")
-    sonnets = re.split(r'\n\s*\d+\s*\n', text)[1:]  # Remove header text
+    # Capture the original sonnet number instead of replacing it with 0..n-1.
+    matches = list(re.finditer(r'(?m)^\s*(\d+)\s*$', text))
+    sonnets = []
+    for i, match in enumerate(matches):
+      sonnet_id = match.group(1)
+      start = match.end()
+      end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
+      sonnet_text = text[start:end].strip()
+      if sonnet_text:
+        sonnets.append((sonnet_id, sonnet_text))
 
-    # Strip leading/trailing spaces
-    return [s.strip() for s in sonnets]
+    return sonnets
 
   def __len__(self):
     return len(self.sonnets)
 
   def __getitem__(self, idx):
-    return (idx, self.sonnets[idx])
+    return self.sonnets[idx]
 
   def collate_fn(self, all_data):
     idx = [example[0] for example in all_data]
     sonnets = [example[1] for example in all_data]
+    if self.append_eos:
+      sonnets = [
+        sonnet if sonnet.endswith(self.tokenizer.eos_token) else f'{sonnet}{self.tokenizer.eos_token}'
+        for sonnet in sonnets
+      ]
 
     encoding = self.tokenizer(sonnets, return_tensors='pt', padding=True, truncation=True)
     token_ids = torch.LongTensor(encoding['input_ids'])
