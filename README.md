@@ -28,6 +28,14 @@
 
 두 파일에 있는 누락된 코드 블록을 완성하는 것도 중요하지만, PART-II의 핵심은 기능의 확장에 있다. GPT-2 모델을 수정하여 한 문장이 다른 문장의 패러프레이즈인지 판단하는 능력과 소네트를 생성하는 능력을 개선하는 방법에 촛점을 맞추도록 하자.
 
+#### PART-II Sonnet Generation 산출물
+
+* 구현 및 고도화 코드: `sonnet_generation.py`, `datasets.py`, `evaluation.py`
+* 최종 official 생성 결과: `predictions/generated_sonnets.txt`
+* 실험 검증 및 시각화 노트북: `notebooks/PART2_sonnet_generation.ipynb`
+  * 무거운 학습은 별도 터미널에서 수행한 checkpoint 기반으로 정리했다.
+  * 노트북에는 dev 성능 비교, 30epoch 과적합 분석, 최종 형식 검증 결과가 실행 출력으로 포함되어 있다.
+
 ## 환경 설정
 **주목**: .yml 파일의 버전을 변경하지 말것.
 
